@@ -1,0 +1,9 @@
+{
+    "name": "Jay",
+    "require": {
+    	"php": ">=5.3.2",
+    	"opauth/opauth": "*",
+    	"opauth/facebook": "*",
+        "phpmailer/phpmailer": "*"
+    }
+}
