@@ -49,6 +49,8 @@
 							}else{
 								$fields['created_date']		= isset($post['created_date']) ? $post['created_date'] : date("Y/m/d H:i:s");
 								db_insert("users", $fields);
+								// send email to new user
+								$this->send_email($fields);
 							}
 						}else{
 							die_err("This email address is being used.");
@@ -60,11 +62,35 @@
  				}else{
  					die_err("two password not match");
  				}
+			}elseif( isset($post['link']) && strpos($post['link'], "facebook.com") === true ){
+				// for facebook
+				$sql = "SELECT count(*) FROM users WHERE facebook_id = ".db_string($post['id']);
+				if ( db_lookup($sql) == 0 ){
+					$fields['first_name'] 	= $post['first_name'];
+					$fields['last_name'] 	= $post['last_name'];
+					$fields['facebook_id'] 	= $post['id'];
+					$fields['email'] 		= $post['id']; // I can't get email address from facebook
+					$fields['group_id'] 	= 2;
+					$fields['active']		= "T";
+					$fields['created_date']	=  date("Y/m/d H:i:s");
+					db_insert("users", $fields);
+
+					$this->send_email($fields);
+				}else{
+					$fields['first_name'] 	= $post['first_name'];
+					$fields['last_name'] 	= $post['last_name'];
+					db_update("users", $fileds, "facebook_id = ".db_string($post['id']));
+				}
+
+
+				
+
+
 			}else{
 				die_err("password is emtpy");
 			}
 
-			//$this->send_email($fields);
+			
 			redirect("index.php");
 		}
 

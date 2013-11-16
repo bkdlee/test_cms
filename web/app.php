@@ -4,7 +4,7 @@
 
     $task 	 = getvar("task");
     $user = new users();
-    switch($task){
+    switch($task){  		
     	case "remove_user":
     	    if ( !is_Logged() ){
 		    	redirect("login.php");

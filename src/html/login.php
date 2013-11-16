@@ -19,7 +19,7 @@
 				<input type="password" class="form-control" id="" placeholder="Password" name="password">
 			</div>
 			<div class="form-group">
-				<a href="app.php?task=add_user">Register</a> | <a href="facebook">Use Facebook</a>
+				<a href="app.php?task=add_user">Register</a> | <a href="auth/facebook">Use Facebook</a>
 			</div>
 				<button type="submit" class="btn btn-primary">Login</button>
 		</form>
