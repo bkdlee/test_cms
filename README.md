@@ -26,4 +26,7 @@ In the opauth.conf.php file has facebook app_id and app_secret configration.
 In apache, set DocumentRoot to "test_cms".
 if want use "web" as root Directory, please remove "/web" under opauth.conf.php PATH
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2ef270a8b280038148598450c9654d0a0633e2bd
