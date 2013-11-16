@@ -10,7 +10,9 @@
 		    	redirect("login.php");
 		    }else{
 		    	$user_id = getvar("id");
-    			$user->remove_user($user_id);
+    			if ( $user->remove_user($user_id) ){
+    				echo "T";
+    			}
 		    }
     		break;
     	case "edit_user":

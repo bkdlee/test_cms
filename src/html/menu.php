@@ -7,7 +7,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Test CMS Users</a>
+                <a class="navbar-brand" href="index.php">Test CMS Users</a>
         </div>
         <p class="navbar-text pull-right">
         <?php if ( is_Logged() ) :?>

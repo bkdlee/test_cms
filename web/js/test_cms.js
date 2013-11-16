@@ -21,7 +21,7 @@ var cms = {
 					buttons:{
 						"Delete user": function(){
 							$.get(url, function(data){
-								if ( data === true){
+								if ( data === "T"){
 									location.reload();
 								} else {
 									alert("error");

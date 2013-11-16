@@ -4,13 +4,15 @@
         function __construct() {
        		db_connect();
         }
-		function remove_user(){
+        function __destruct() {
+	       db_close();
+	    }
+		function remove_user($user_id){
 			$result = false;
 			if ( has_permission() ){
 				$sql = "UPDATE users SET active = 'D' WHERE id = ".$user_id;
-				if ( db_query($sql) ){
-					$result = true;
-				}
+				db_query($sql) or die(mysql_error());
+				$result = true;
 			}
 			return $result;
 		}
@@ -61,7 +63,32 @@
 			}else{
 				die_err("password is emtpy");
 			}
+
+			//$this->send_email($fields);
 			redirect("index.php");
+		}
+
+		function send_email($fields){
+			require_once '../vendor/phpmailer/PHPMailerAutoload.php';
+			$mail = new PHPMailer();
+			$mail->isSMTP();
+			$mail->Host = 'smtp.gmail.com';
+			$mail->Port = 587;
+			$mail->SMTPSecure = 'tls';
+			$mail->SMTPAuth = true;
+			$mail->Username = "username@gmail.com";
+			$mail->Password = "yourpassword";
+			$mail->setFrom('bkd.lee@gmail.com', 'Jay Lee');
+
+			$mail->addAddress($fields['email'], $fields['first_name']." ".$fields['last_name']);
+			$mail->Subject = 'Thank you for your register';
+			$mail->msgHTML("Thank you for your register");
+			if (!$mail->send()) {
+			    die_err("Mailer Error: " . $mail->ErrorInfo);
+			} else {
+			    echo "Message sent!";
+			}
+
 		}
 	}
 

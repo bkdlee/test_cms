@@ -1,6 +1,6 @@
 <?php
 	db_connect();
-	$sql = "SELECT * FROM users ORDER BY first_name";
+	$sql = "SELECT * FROM users WHERE active != 'D' ORDER BY first_name";
 	$query = db_query($sql);
 	db_close();
 ?>
