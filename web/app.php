@@ -22,7 +22,12 @@
 		    	$user_id = getvar("id");
 		    	include('../src/html/header.php');
 				include('../src/html/menu.php');
+				include('../src/model/model.php');
+
+				$model = &new model();
+				$row = $model->get_user_details($user_id);
 				include('../src/html/edit.php');
+
 				include('../src/html/footer.php'); 
 		    }
 			

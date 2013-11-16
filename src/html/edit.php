@@ -1,20 +1,3 @@
-<?php
-	if ( isset( $user_id) && has_permission() ){
-		$sql = "SELECT * FROM users WHERE id = ".$user_id;
-		$query = db_query($sql);
-		$row = db_fetch_array( $query );
-        }else{
-            $row = array(
-                "first_name"    => "",
-                "last_name"     => "",
-                "email"         => "",
-                
-            );
-        }
-
-
-?>
-
 <div class="container">
 	<div class="row">
 		<form action="app.php?task=save" method="POST" role="form" id="edit_user">
@@ -45,6 +28,12 @@
 						Active
 					</label>
 				</div>
+				<?php if ( $user_id > 0) :?>
+				<div class="form-group">
+					<label for="">Facebook ID</label>
+					<input type="text" disabled class="form-control" id="facebook_id" placeholder="" name="facebook_id" value="<?php echo $row['facebook_id'];?>">
+				</div>
+				<?php endif; ?>
 				<input type="hidden" name="created_date" value="<?php echo date("Y/m/d H:i:s"); ?>" />
 				<input type="hidden" name="updated_date" value="<?php echo date("Y/m/d H:i:s"); ?>" />
 				<input type="hidden" name="user_id" value="<?php echo ( !empty($user_id) ? $user_id : 0 ) ?>" />

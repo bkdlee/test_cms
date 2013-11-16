@@ -1,10 +1,3 @@
-<?php
-	db_connect();
-	$sql = "SELECT * FROM users WHERE active != 'D' ORDER BY first_name";
-	$query = db_query($sql);
-	db_close();
-?>
-
 <div class="container">
 	<div class="row">
 		<?php if ( isset($_SESSION['group_id']) && $_SESSION['group_id'] == 1 ) : ?>
@@ -27,7 +20,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php while( $row = db_fetch_array($query) ) :?>
+				<?php foreach($rows as $row) :?>
 				<tr>
 					<td><?php echo $row['id'];?></td>
 					<td><?php echo $row['first_name'];?></td>
@@ -43,7 +36,7 @@
 					</td>
 					<?php endif; ?>
 				</tr>
-				<?php endwhile; ?>
+				<?php endforeach; ?>
 			</tbody>
 		</table>
 	</div>	

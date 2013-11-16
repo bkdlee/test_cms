@@ -49,21 +49,21 @@ class rest{
     function get() {
         $rows = [];
         $i = 0;
-        db_connect();
-        $sql = "SELECT * FROM users ORDER BY first_name";
-        $query = db_query($sql);
-        
-        while($row = db_fetch_array($query)){
-            $rows[$i]['first_name']     = $row["first_name"];
-            $rows[$i]['last_name']      = $row["last_name"];
-            $rows[$i]['email']          = $row["email"];
-            $rows[$i]['active']        = $row["active"];
-            $rows[$i]['facebook_id']    = $row["facebook_id"];
-            $rows[$i]['created_date']    = $row["created_date"];
-            $i++;
+        include('../src/model/model.php');
+
+        $model = &new model();
+        $rows = $model->get_user_list();
+        $users = array();
+        foreach($rows as $i=>$row){
+            $users[$i]['first_name'] = $row['first_name'];
+            $users[$i]['last_name'] = $row['last_name'];
+            $users[$i]['email'] = $row['email'];
+            $users[$i]['active'] = $row['active'];
+            $users[$i]['facebook_id'] = $row['facebook_id'];
+            $users[$i]['created_date'] = $row['created_date'];
+            
         }
-        db_close();
-        return json_encode($rows);
+        return json_encode($users);
         
     }
 
