@@ -6,7 +6,7 @@
 		<script src="js/jquery.validate.min.js"></script>
 		<!-- Bootstrap JavaScript -->
 		<script src="js/bootstrap.min.js"></script>
-		<script src="js/test_cms.js"></script>
+		<script src="js/test_cms.min.js"></script>
 		<script>
 		$(document).ready(function(){
 			cms.global.init();

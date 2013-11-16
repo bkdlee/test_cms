@@ -14,7 +14,7 @@ var cms = {
 				rules:{
 					password:{
 						minlength: 8,
-                                                validpassword: true
+                        validpassword: true
 					},
 					password2:{
 						minlength: 8,
