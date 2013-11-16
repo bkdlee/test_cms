@@ -1,10 +1,30 @@
 var cms = {
 	global: {
 		init: function(){
-			cms.user.deleteConfirm();
+			cms.user.init();
 		}
 	},
 	user:{
+		init: function(){
+			cms.user.formValidate();
+			cms.user.deleteConfirm();
+		},
+		formValidate: function(){
+			$("#edit_user").validate({
+				rules:{
+					password:{
+						minlength: 8
+					},
+					password2:{
+						minlength: 8,
+						equalTo: "#password"
+					}
+				}
+			});
+			$.validator.addMethod("validpassword", function(value, element) {
+    			return this.optional(element) || /^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W]).*$/.test(value);
+			}, "The password must contain a minimum of one lower case character," + " one upper case character, one digit and one special character..");
+		},
 		deleteConfirm: function(){
 			$(".glyphicon-remove").each(function(){
 				var url = $(this).attr("href");
