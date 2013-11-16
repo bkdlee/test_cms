@@ -2,7 +2,29 @@
     require_once '../src/config.php';
     require_once '../src/function/database.php';
     require_once '../src/function/session.php';
+    require_once '../vendor/phpmailer/PHPMailerAutoload.php';
 
+    function send_email($fields){
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = $config->email_host;
+        $mail->Port = $config->email_port;
+        $mail->SMTPSecure = 'tls';
+        $mail->SMTPAuth = true;
+        $mail->Username = $config->email_username;
+        $mail->Password = $config->email_password;
+        $mail->setFrom($config->email_frm_add, $config->email_frm_name);
+
+        $mail->addAddress($fields['email'], $fields['first_name']." ".$fields['last_name']);
+        $mail->Subject = 'Thank you for your register';
+        $mail->msgHTML("Thank you for your register");
+        if (!$mail->send()) {
+            die_err("Mailer Error: " . $mail->ErrorInfo);
+        } else {
+            echo "Message sent!";
+        }
+
+    }
 
     function has_permission(){
         $result = false;
