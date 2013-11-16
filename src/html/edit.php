@@ -30,7 +30,7 @@
 				</div>
 				<input type="hidden" name="created_date" value="<?php echo date("Y/m/d H:i:s"); ?>" />
 				<input type="hidden" name="updated_date" value="<?php echo date("Y/m/d H:i:s"); ?>" />
-				<input type="hidden" name="id" value="<?php echo ( !empty($user_id) ? $user_id : 0 ) ?>" />
+				<input type="hidden" name="user_id" value="<?php echo ( !empty($user_id) ? $user_id : 0 ) ?>" />
 
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</div>

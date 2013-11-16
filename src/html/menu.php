@@ -10,6 +10,8 @@
                 <a class="navbar-brand" href="#">Test CMS Users</a>
         </div>
         <p class="navbar-text pull-right">
+        <?php if ( is_Logged() ) :?>
                 <a href="logout.php" class="navbar-link">Log out</a>
+        <?php endif; ?>
         </p>
 </nav>

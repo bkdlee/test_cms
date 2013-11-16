@@ -1,28 +1,32 @@
 <?php
     require_once '../src/function/general.php';
     require_once '../src/function/users.php';
-    if ( !is_Logged() ){
-    	redirect("login.php");
-    }
 
     $task 	 = getvar("task");
     $user = new users();
     switch($task){
     	case "remove_user":
-    		$user_id = getvar("id");
-    		$user->remove_user($user_id);
+    	    if ( !is_Logged() ){
+		    	redirect("login.php");
+		    }else{
+		    	$user_id = getvar("id");
+    			$user->remove_user($user_id);
+		    }
     		break;
     	case "edit_user":
-			$user_id = getvar("id");
+    		if ( !is_Logged() ){
+		    	redirect("login.php");
+		    }else{
+		    	$user_id = getvar("id");
+		    }
+			
 			break;
 		case "save":
 			if ( isset($_POST) ){
 				$user->save($_POST);
 			}
-			
 			break;
     	case "add_user":
-			
 			include('../src/html/header.php');
 			include('../src/html/menu.php');
 			include('../src/html/edit.php');

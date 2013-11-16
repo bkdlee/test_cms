@@ -546,7 +546,7 @@
         if (is_null($date)) return 'NULL';
         if ($date === '') return 'NULL';
         $dt = strtotime($date);
-        return db_string(date('Y-m-d H:i:s O', $dt));
+        return db_string(date('Y-m-d H:i:s', $dt));
     }
 
     function db_quote($text) {
@@ -566,19 +566,22 @@
         if (is_null($value)) return 'NULL';
 
         if ((is_array($value)) && (array_key_exists(0, $value))) return $value[0];
+        $type = preg_replace("/\([^)]+\)/","",$type);
 
         switch ($type) {
             case 'varchar':
             case 'text':
+            case 'char':
                 if ($value == '') return 'NULL';
                 return "'" . db_escape($value) . "'";
                 break;
             case 'date':
+            case 'datetime':
             case 'timestamptz':
             case 'timestamp':   return db_date($value);
             case 'bpchar':      return db_bit($value);
             case 'numeric':     return db_dec($value, $scale);
-
+            case 'int':
             case 'int8':
             case 'int4':        return db_int($value);
             default:
@@ -601,7 +604,7 @@
         if (is_null($num)) return 'NULL';
         if ($num === '') return 'NULL';
 
-        return intval(val($num));
+        return intval($num);
     }
 
     function db_dec($num, $scale) {
@@ -732,8 +735,7 @@
             }  */
             $value = db_string(
                 $value,
-                $table_fields[$field_name]['type'],
-                $table_fields[$field_name]['scale']
+                $table_fields[$field_name]['type']
             );
             if ($value === 'NULL') {
                 if ($table_fields[$field_name]['is_nullable'] != true) {
@@ -747,15 +749,18 @@
         foreach ($values as $field_name_escaped => $value_escaped) {
             $insert_fields .= (($insert_fields == '') ? '' : ', ') . $field_name_escaped;
         }
+        $insert_fields = str_replace('"', '', $insert_fields);
         $insert_values = implode(", ", $values);
 
         $sql = "INSERT\n";
-        $sql .="INTO    " . db_string_table($table) . "\n";
+        $sql .="INTO    " . $table . "\n";
         $sql .="        ({$insert_fields})\n";
         $sql .="VALUES  ({$insert_values})\n";
-        
+
+
         $query = db_query($sql, $connection);
-        return db_rows_affected($query, $connection);
+        //return db_rows_affected($query, $connection);
+        return true;
     }
 
 
@@ -764,6 +769,7 @@
         global $db_link;
         $connection = ((is_null($connection)) ? $db_link : $connection);
         if (!is_resource($connection)) db_error($connection, 'db not connected or not a valid resource');
+
         if (!is_resource($query_result)) db_error($query_result, 'query_result is not a valid resource');
         $result = mysql_affected_rows($query_result);
         return $result;
@@ -935,6 +941,10 @@
     function db_table_def($table_name, $key_field_name=false, $connection=null) { // IC2007 specific function
         static $cache=array();
         if (isset($cache[$table_name])) return $cache[$table_name];
+
+
+
+        /*
         $sql = "SELECT  c.relname as table_name,
                         a.attnum as column_order,
                         a.attname AS column_name,
@@ -953,10 +963,6 @@
                             ELSE NULL
                         END AS prec,
                         a.atttypmod AS lengthvar,
-                        CASE WHEN a.attnotnull = 't' THEN 'F' ELSE 'T' END as isnullable,
-                        d.adsrc as default_text,
-                        CASE WHEN d.adsrc ILIKE 'nextval(%' THEN 'T' ELSE 'F' END as isautonumber,
-                        'F' as iscomputed,
                         t.typname as xtype
                 FROM    mysql_attribute a
                         INNER JOIN mysql_class c ON c.oid = a.attrelid
@@ -967,14 +973,19 @@
                 ORDER BY a.attnum";
 
         $query = db_query($sql, $connection);
+        */
+
+        $query = db_query(sprintf('SHOW COLUMNS FROM %s', $table_name), $connection);
+
         if (!db_num_rows($query)) {
             db_error($connection, 'Invalid table: ' . $table_name);
         }
 
         $return=array();
         while ($row = db_fetch_array($query)) {
-            if (strpos($row['default_text'], "nextval('") !== false) $row['default_text'] = '';
-            $row['caption'] = ucwords(str_replace('_', ' ', $row['column_name']));
+/*
+            if (strpos($row['Default'], "nextval('") !== false) $row['Default'] = '';
+            $row['caption'] = ucwords(str_replace('_', ' ', $row['Field']));
             if ($row['length'] < 0) {
                 if ($row['scale'] > 0) {
                     $row['length'] = $row['scale'];
@@ -982,32 +993,28 @@
                     $row['length'] = 999999999;
                 }
             }
-
-            $default_value = trim($row['default_text']);
+*/
+            $default_value = trim($row['Default']);
+            /*
             if ($default_value != '') {
                 $default = db_fetch_array(db_query("SELECT  {$default_value} as def"), 'assoc');
                 $default_value = $default['def'];
             }
+*/
 
-
-            if ($row['column_name'] != 'xxxxrowguid') {
+            if ($row['Field'] != 'xxxxrowguid') {
                 $field=array(
-                    'short_name'    => $row['column_name'], // mssql hangover.
-                    'name'          => $row['column_name'],
-                    'type'          => $row['column_type'],
+                    'short_name'    => $row['Field'], // mssql hangover.
+                    'name'          => $row['Field'],
+                    'type'          => $row['Type'],
                     'default'       => $default_value,
-                    'is_nullable'   => ($row['isnullable']=='T' ? true : false),
-                    'length'        => $row['length'],
-                    'scale'         => $row['scale'],
-                    'decimal_places'=> $row['prec'],
-                    'is_computed'   => ($row['iscomputed']=='T' ? true : false),
-                    'is_identity'   => ($row['isautonumber']=='T' ? true : false),
-                    'caption'       => $row['caption']
+                    'caption'       => $row['Field']
                 );
             }
 
             $return[$field['name']] = $field;
         }
+
         $cache[$table_name] = $return;
         return $return;
     }
@@ -1051,9 +1058,6 @@
                         END AS prec,
                         a.atttypmod AS lengthvar,
                         CASE WHEN a.attnotnull = 't' THEN 'F' ELSE 'T' END as isnullable,
-                        d.adsrc as default_text,
-                        CASE WHEN d.adsrc ILIKE 'nextval(%' THEN 'T' ELSE 'F' END as isautonumber,
-                        'F' as iscomputed,
                         t.typname as xtype
                 FROM    mysql_attribute a
                         INNER JOIN mysql_class c ON c.oid = a.attrelid
