@@ -8,7 +8,7 @@
 <div class="container">
 	<div class="row">
 		<?php if ( isset($_SESSION['group_id']) && $_SESSION['group_id'] == 1 ) : ?>
-			<a type="button" class="btn btn-primary" href="app.php?task=edit_user">New User</a>
+			<a type="button" class="btn btn-primary" href="app.php?task=add_user">New User</a>
 		<?php endif; ?>
 		<h1>User List</h1>
 		<table class="table table-hover">

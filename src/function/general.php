@@ -4,6 +4,14 @@
     require_once '../src/function/session.php';
 
 
+    function has_permission(){
+        $result = false;
+        // group_id for admin is 1
+        if ( isset($_SESSION['group_id']) && isset($_SESSION['group_id']) == 1 ){
+            $result = true;
+        }
+        return $result;
+    }
     function check_login_details($email, $password){
         $result = false;
         if ((!isset($_SESSION)) OR (empty($_SESSION))) {          
