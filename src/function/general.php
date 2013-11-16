@@ -12,17 +12,21 @@
         }
         return $result;
     }
-    function check_login_details($email, $password){
+    function check_login_details($email, $password, $group_id=""){
         $result = false;
         if ((!isset($_SESSION)) OR (empty($_SESSION))) {          
             session_start();
         }
         
         db_connect();
+
         $sql = "SELECT * 
                 FROM users 
                 WHERE active = 'T' AND email = ". db_string($email)
                 ;
+        if ( !empty($group_id) ){
+            $sql .= " AND group_id = ".$group_id;
+        }
         $query = db_query($sql);
         if ( db_num_rows($query) > 0 ){
             $row = db_fetch_array($query);
