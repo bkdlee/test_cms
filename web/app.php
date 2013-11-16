@@ -20,6 +20,10 @@
 		    	redirect("login.php");
 		    }else{
 		    	$user_id = getvar("id");
+		    	include('../src/html/header.php');
+				include('../src/html/menu.php');
+				include('../src/html/edit.php');
+				include('../src/html/footer.php'); 
 		    }
 			
 			break;
