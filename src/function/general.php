@@ -1,6 +1,44 @@
 <?php
+    require_once '../src/config.php';
+    require_once '../src/function/database.php';
+    require_once '../src/function/session.php';
 
-	function generate_random_password($char_length, $num_length) {
+
+    function check_login_details($email, $password){
+        $result = false;
+        if ((!isset($_SESSION)) OR (empty($_SESSION))) {          
+            session_start();
+        }
+        
+        db_connect();
+        $sql = "SELECT * 
+                FROM users 
+                WHERE active = 'T' AND email = ". db_string($email)
+                ;
+        $query = db_query($sql);
+        if ( db_num_rows($query) > 0 ){
+            $row = db_fetch_array($query);
+            if ( md5($password) === $row['password']){
+                $_SESSION['user_id'] = $row['id'];
+                $_SESSION['group_id'] = $row['group_id'];
+                $_SESSION['first_name'] = $row['first_name'];
+                $_SESSION['last_name'] = $row['last_name'];
+                $result = true;
+            }
+        }
+        db_close();
+        return $result;
+    }
+
+    function is_Logged(){
+        $result = false;
+        if( isset($_SESSION['user_id']) && $_SESSION['user_id'] > 0 ){
+            $result = true;
+        }
+        return $result;
+    }
+
+    function generate_random_password($char_length, $num_length) {
         $chars='BCDEFHJKLMNPQRTWXYZ';
         $numbers='123789';
         return random_string($chars, $char_length) . random_string($numbers, $num_length);

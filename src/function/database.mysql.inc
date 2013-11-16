@@ -477,7 +477,7 @@
         global $db_link, $config, $db_misc_time;
         $start=_db_time();
         if (!is_resource($db_link)) {
-            $db_link = mysql_connect($config->db_server.":".$config->db_port, $config->db_user, $config->db_pass);
+            $db_link = @mysql_connect($config->db_server.":".$config->db_port, $config->db_user, $config->db_pass);
              $db_selected = mysql_select_db($config->db_name, $db_link);
             if (!is_resource($db_link)) db_error(null, 'unable to connect to database server');
             if (!$db_selected) db_error ('Can\'t use foo : ' . mysql_error());
@@ -492,7 +492,7 @@
         global $db_link, $config, $db_misc_time;
         $start=_db_time();
 
-        $db_link = mysql_connect($config->db_server.":".$config->db_port, $config->db_user, $config->db_pass);
+        $db_link = @mysql_connect($config->db_server.":".$config->db_port, $config->db_user, $config->db_pass);
         $db_selected = mysql_select_db($config->db_name, $db_link);
 
         if (!is_resource($db_link)) db_error(null, 'unable to connect to database server');
@@ -560,7 +560,7 @@
     function db_escape($text) {
         /* database must UTF8*/
         global $db_link;
-        return mysql_escape_string($db_link, utf8_encode($text));
+        return mysql_escape_string(utf8_encode($text));
     }
     function db_string($value, $type='varchar', $scale=0) {
         if (is_null($value)) return 'NULL';
@@ -861,6 +861,7 @@
 
 
         //global $db_link;
+
         if (!is_resource($resource)) db_error(null, 'query passed is not a valid resource - run db_query first.');
         switch ($type) {
             case PGSQL_NUM: case 'num': case 'NUM':
@@ -876,6 +877,8 @@
                 $result = mysql_fetch_array($resource, null, PGSQL_BOTH);
                 break;
         }
+
+
 
         $db_fetch_time += _db_time_diff($start);
 
