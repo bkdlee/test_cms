@@ -13,7 +13,8 @@ var cms = {
 			$("#edit_user").validate({
 				rules:{
 					password:{
-						minlength: 8
+						minlength: 8,
+                                                validpassword: true
 					},
 					password2:{
 						minlength: 8,
@@ -22,8 +23,17 @@ var cms = {
 				}
 			});
 			$.validator.addMethod("validpassword", function(value, element) {
-    			return this.optional(element) || /^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W]).*$/.test(value);
-			}, "The password must contain a minimum of one lower case character," + " one upper case character, one digit and one special character..");
+                            var result = false;
+                            var m = value.match(/\d+/g);
+                            var num = '';
+                            $.each(m, function(){
+                                num += m;
+                            });
+                            if (num.length >= 2){
+                                result = true;
+                            }
+                            return result;
+			}, "password must be contain a minimum of 2 numbers");
 		},
 		deleteConfirm: function(){
 			$(".glyphicon-remove").each(function(){

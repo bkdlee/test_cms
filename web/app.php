@@ -1,7 +1,7 @@
 <?php
     require_once '../src/function/general.php';
     require_once '../src/function/users.php';
-	
+
     $task 	 = getvar("task");
     $user = new users();
     switch($task){  		

@@ -3,7 +3,14 @@
 		$sql = "SELECT * FROM users WHERE id = ".$user_id;
 		$query = db_query($sql);
 		$row = db_fetch_array( $query );
-	}
+        }else{
+            $row = array(
+                "first_name"    => "",
+                "last_name"     => "",
+                "email"         => "",
+                
+            );
+        }
 
 
 ?>
@@ -19,7 +26,7 @@
 					<label for="">Last Name</label>
 					<input type="text" class="form-control required" id="last_name" placeholder="Last Name" name="last_name" value="<?php echo $row['last_name'];?>">
 					<label for="">Email</label>
-					<input type="text" class="form-control required" id="email" placeholder="Email" name="email" value="<?php echo $row['email'];?>">
+					<input type="text" class="form-control required email" id="email" placeholder="Email" name="email" value="<?php echo $row['email'];?>">
 					<label for="">Password</label>
 					<input type="password" class="form-control required" id="password" placeholder="password" name="password">
 					<label for="">Confirm Password</label>
