@@ -7,8 +7,8 @@
 	       db_close();
 	    }
 
-	    function get_user_details($user_id){
-    		if ( isset( $user_id) && has_permission() ){
+	    function get_user_details($user_id=""){
+    		if ( isset( $user_id) && $user_id > 0 && has_permission() ){
 				$sql = "SELECT first_name, last_name, email, facebook_id FROM users WHERE id = ".$user_id;
 				$query = db_query($sql);
 				$row = db_fetch_array( $query );

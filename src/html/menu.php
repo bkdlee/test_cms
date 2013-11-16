@@ -9,6 +9,11 @@
                 </button>
                 <a class="navbar-brand" href="index.php">Test CMS Users</a>
         </div>
+        <ul class="nav navbar-nav">
+                <li>
+                        <a href="rest.php">REST Service</a>
+                </li>
+        </ul>
         <p class="navbar-text pull-right">
         <?php if ( is_Logged() ) :?>
                 <a href="logout.php" class="navbar-link">Log out</a>

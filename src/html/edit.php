@@ -28,7 +28,7 @@
 						Active
 					</label>
 				</div>
-				<?php if ( $user_id > 0) :?>
+				<?php if ( isset($user_id) && $user_id > 0) :?>
 				<div class="form-group">
 					<label for="">Facebook ID</label>
 					<input type="text" disabled class="form-control" id="facebook_id" placeholder="" name="facebook_id" value="<?php echo $row['facebook_id'];?>">

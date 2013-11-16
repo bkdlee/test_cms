@@ -1,6 +1,7 @@
 <?php
     require_once '../src/function/general.php';
     require_once '../src/function/users.php';
+    require_once('../src/model/model.php');
 
     $task 	 = getvar("task");
     $user = new users();
@@ -22,7 +23,7 @@
 		    	$user_id = getvar("id");
 		    	include('../src/html/header.php');
 				include('../src/html/menu.php');
-				include('../src/model/model.php');
+				
 
 				$model = &new model();
 				$row = $model->get_user_details($user_id);
@@ -40,6 +41,9 @@
     	case "add_user":
 			include('../src/html/header.php');
 			include('../src/html/menu.php');
+
+			$model = &new model();
+			$row = $model->get_user_details();
 			include('../src/html/edit.php');
 			include('../src/html/footer.php'); 
     		break;
